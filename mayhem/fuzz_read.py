@@ -6,7 +6,7 @@ import io
 from contextlib import contextmanager
 import fuzz_helpers
 
-with atheris.instrument_imports():
+with atheris.instrument_imports(include=['environs', 'json', ]):
     import environs
 
 @contextmanager

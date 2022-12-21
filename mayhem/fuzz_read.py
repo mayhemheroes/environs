@@ -21,11 +21,31 @@ def nostdout():
 
 def TestOneInput(data):
     fdp = fuzz_helpers.EnhancedFuzzedDataProvider(data)
-    with fdp.ConsumeTemporaryFile('.env', all_data=True, as_bytes=False) as fname, nostdout():
-        env = environs.Env()
-        env.read_env(fname)
-        env.dump()
-        env.seal()
+    try:
+        with fdp.ConsumeTemporaryFile('.env', all_data=False, as_bytes=False) as fname, nostdout():
+            env = environs.Env()
+            env.read_env(fname)
+            test = fdp.ConsumeIntInRange(0, 6)
+            if test == 0:
+                env.dump()
+            elif test == 1:
+                env.seal()
+            elif test == 2:
+                env.int(fdp.ConsumeRandomString())
+            elif test == 3:
+                env.date(fdp.ConsumeRandomString())
+            elif test == 4:
+                env.timedelta(fdp.ConsumeRandomString())
+            elif test == 5:
+                env.log_level(fdp.ConsumeRandomString())
+            else:
+                env.list(fdp.ConsumeRandomString())
+    except environs.EnvError:
+        return -1
+    except ValueError as e:
+        if 'null' in str(e):
+            return -1
+        raise
 
 
 def main():

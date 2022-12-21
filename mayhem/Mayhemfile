@@ -1,0 +1,9 @@
+project: environs
+target: fuzz-read
+testsuite:
+    - file://mayhem/testsuite
+
+cmds:
+  - cmd: /src/mayhem/fuzz_read.py
+    libfuzzer: true
+    timeout: 12

@@ -6,7 +6,7 @@ import io
 from contextlib import contextmanager
 import fuzz_helpers
 
-with atheris.instrument_imports(include=['environs', 'json', ]):
+with atheris.instrument_imports():
     import environs
 
 @contextmanager
@@ -24,7 +24,7 @@ def TestOneInput(data):
     try:
         with fdp.ConsumeTemporaryFile('.env', all_data=False, as_bytes=False) as fname, nostdout():
             env = environs.Env()
-            env.read_env(fname)
+            env.read_env(fname, recurse=fdp.ConsumeBool())
             test = fdp.ConsumeIntInRange(0, 6)
             if test == 0:
                 env.dump()

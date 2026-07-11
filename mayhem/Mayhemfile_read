@@ -1,0 +1,11 @@
+project: environs
+target: fuzz-read
+
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/fuzz-read/testsuite
+
+cmds:
+  - cmd: /mayhem/fuzz-read
+    libfuzzer: true
+    timeout: 12
